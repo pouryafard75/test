@@ -42,7 +42,7 @@ jobs:
           script: |
             const url = '${{ steps.trigger.outputs.url }}';
             const diff_url = '${{ steps.run_rm_exporter.outputs.diff_url }}';
-
+            const artifact_url = '${{ steps.run_rm_exporter.outputs.artifact_url }}'; // Add artifact_url output
             await github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
