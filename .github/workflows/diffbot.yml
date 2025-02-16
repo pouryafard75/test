@@ -20,14 +20,12 @@ jobs:
             const commentBody = context.payload.comment.body;
             const regex = /@diff\s+(\S+)/;  // Match the next non-whitespace string after @diff
             const match = commentBody.match(regex);
-
             if (match) {
               core.setOutput('triggered', 'true');
-              core.setOutput('url', match[1].trim());  // Capture the URL-like string
+              core.setOutput('url', match[1].trim()); 
             } else {
               core.setOutput('triggered', 'false');
             }
-    
       - name: Running the RM action exporter
         uses: pouryafard75/refactoringminer-astdiff-bot@v0.1.15
         id: run_rm_exporter 
@@ -41,12 +39,11 @@ jobs:
         with:
           script: |
             const url = '${{ steps.trigger.outputs.url }}';
-            const diff_url = '${{ steps.run_rm_exporter.outputs.diff_url }}';
             const artifact_url = '${{ steps.run_rm_exporter.outputs.artifact_url }}'; // Add artifact_url output
             await github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `👋 You triggered the bot with the URL: \`${url}\`. The diff is being processed at: ${diff_url}. You can download it here: [Download Artifact](${artifact_url}).`
+              body: `👋 You triggered the bot with the URL: \`${url}\`. You can download it here: [Download Artifact](${artifact_url}).`
               
             })
