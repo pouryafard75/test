@@ -27,7 +27,7 @@ jobs:
               core.setOutput('triggered', 'false');
             }
       - name: Running the RM action exporter
-        uses: EmpiricalSEConcordia/Refactoringminer-Astdiff-Exporter@v0.5.3
+        uses: EmpiricalSEConcordia/Refactoringminer-Astdiff-Exporter@v0.5.4
         id: run_rm_exporter 
         with:
           URL: "${{ steps.trigger.outputs.url }}"
