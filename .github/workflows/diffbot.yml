@@ -30,8 +30,8 @@ jobs:
         uses: pouryafard75/refactoringminer-astdiff-bot@v0.4
         id: run_rm_exporter 
         with:
-          OAuthToken: ${{ secrets.OAUTHTOKEN }}
           URL: "${{ steps.trigger.outputs.url }}"
+          deploy: true
 
       - name: Reply 
         if: ${{ steps.trigger.outputs.triggered == 'true' }}
@@ -39,11 +39,17 @@ jobs:
         with:
           script: |
             const url = '${{ steps.trigger.outputs.url }}';
-            const artifact_url = '${{ steps.run_rm_exporter.outputs.artifact_url }}'; // Add artifact_url output
+            const artifact_url = '${{ steps.run_rm_exporter.outputs.artifact_url }}';
+            const deploy_url = '${{ steps.run_rm_exporter.outputs.deploy_url }}'; 
+            let bodyMessage = `👋 You triggered the bot with the URL: \`${url}\`. You can download it here: [Download Artifact](${artifact_url}).`;
+
+            if (deploy_url) {
+              bodyMessage += `Deployed [here](${deploy_url}).`;
+            }
+
             await github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `👋 You triggered the bot with the URL: \`${url}\`. You can download it here: [Download Artifact](${artifact_url}).`
-              
+              body: bodyMessage
             })
