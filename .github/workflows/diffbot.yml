@@ -23,7 +23,7 @@ jobs:
             if (match) {
               core.setOutput('triggered', 'true');
               core.setOutput('url', match[1].trim()); 
-              core.setOutput('word_after_url', match[2].trim()); 
+              core.setOutput('screenshot', match[2].trim()); 
             } else {
               core.setOutput('triggered', 'false');
             }
@@ -34,6 +34,8 @@ jobs:
         with:
           OAuthToken: ${{ secrets.OAUTHTOKEN }}
           URL: "${{ steps.trigger.outputs.url }}"
+          screenshot: $${{steps.trigger.output.screenshot}}
+          
 
       # Step 2: Reply to the user with artifact url
       - name: Reply 
