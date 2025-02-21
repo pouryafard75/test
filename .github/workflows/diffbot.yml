@@ -18,18 +18,18 @@ jobs:
         with:
           script: |
             const commentBody = context.payload.comment.body;
-            const regex = /@diff\s+(\S+)/;  // Match the next non-whitespace string after @diff
+            const regex = /@diff\s+(\S+)\s+(\S+)/;  // Match the URL and the next word
             const match = commentBody.match(regex);
             if (match) {
               core.setOutput('triggered', 'true');
               core.setOutput('url', match[1].trim()); 
+              core.setOutput('word_after_url', match[2].trim()); 
             } else {
               core.setOutput('triggered', 'false');
             }
-
       # Step 1: Run the exporter
       - name: Running the RM action exporter
-        uses: pouryafard75/refactoringminer-astdiff-exporter@v0.5.6
+        uses: pouryafard75/refactoringminer-astdiff-exporter@v0.6
         id: run_rm_exporter 
         with:
           OAuthToken: ${{ secrets.OAUTHTOKEN }}
