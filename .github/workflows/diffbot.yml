@@ -33,7 +33,7 @@ jobs:
       # Step 1: Run the exporter
       - name: Running the RM action exporter
         if : ${{ steps.trigger.outputs.triggered == 'true'}}
-        uses: pouryafard75/refactoringminer-astdiff-exporter@v0.8.1
+        uses: pouryafard75/refactoringminer-astdiff-exporter@v0.8.2
         id: run_rm_exporter 
         with:
           OAuthToken: ${{ secrets.OAUTHTOKEN }}
@@ -61,18 +61,43 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `👋 You triggered the bot with the URL: \`${url}\`. You can download it here: [Download Artifact](${artifact_url}).`
-              
+              body: `👋 You triggered the bot with the URL: \`${url}\`. You can download it here: [Download Artifact](${artifact_url}).`  
             })
+
+
+      - name: Generate image list
+        id: generate-paths
+        run: |
+          paths=""
+          for i in $(seq 0 ${{ steps.run_rm_exporter.outputs.numberOfScreenshots }}); do
+            paths+=$'\n'"${{ steps.run_rm_exporter.outputs.screenshots_path }}$i.png"
+          done
+          echo "paths<<EOF" >> $GITHUB_ENV
+          echo "$paths" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
 
       - name: Upload image
         if: ${{ steps.trigger.outputs.screenshot != null }}
         id: upload-image-0
         uses: McCzarny/upload-image@v1.5.0
         with:
-          path: ${{ steps.run_rm_exporter.outputs.screenshots_path }}1.png
+          path: ${{ env.paths }}
           uploadMethod: imgbb
           apiKey: '${{ secrets.IMGBB_API_KEY }}'
+
+
+      - name: Generate image markdown
+        id: generate-markdown
+        run: |
+          markdown="Images:\n"
+          count=${{ steps.run_rm_exporter.outputs.screenshot_count }}
+          for i in $(seq 0 $count); do
+            markdown+="![${i}](${{fromJson(steps.upload_image.outputs.urls)[$i]}})"
+          done
+          echo "markdown<<EOF" >> $GITHUB_ENV
+          echo "$markdown" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
           
       - name: 'Comment Screenshots'
         uses: actions/github-script@0.3.0
@@ -80,5 +105,9 @@ jobs:
         with:
           github-token: ${{ secrets.OAUTHTOKEN }}
           script: |
-            const { issue: { number: issue_number }, repo: { owner, repo }  } = context;
-            github.issues.createComment({ issue_number, owner, repo, body: 'Uploaded image:\n![0](${{steps.upload-image-0.outputs.url}})'});
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: "Uploaded image(s):\n${{ env.markdown }}"
+            })
