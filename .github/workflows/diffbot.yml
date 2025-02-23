@@ -98,14 +98,16 @@ jobs:
       - name: Generate image markdown
         id: generate-markdown
         run: |
-          markdown="Images:\n"
-          count=${{ steps.run_rm_exporter.outputs.numberOfScreenshots }}
-          for i in $(seq 1 $count); do
-            url=${{ steps.upload-image-all.outputs.urls }}[$((i - 1))]
-            markdown+="![${i}](${url})\n"
+          urls="${{ fromJson(steps.upload_image.outputs.urls) }}"
+          markdownBody="Images:\n"
+          i=0
+          for url in $urls; do
+            markdownBody="${markdownBody}![${i}](${url})\n"
+            ((i++))
           done
-          echo "markdown<<EOF" >> $GITHUB_ENV
-          echo "$markdown" >> $GITHUB_ENV
+          echo "Body content: $markdownBody"
+          echo "markdownBody<<EOF" >> $GITHUB_ENV
+          echo "$markdownBody" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
 
 
