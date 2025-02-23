@@ -76,7 +76,7 @@ jobs:
           paths=""
       
           # Loop through the screenshots and append to the paths variable
-          for i in $(seq 1 $((number_of_screenshots + 1))); do
+          for i in $(seq 1 $((number_of_screenshots))); do
             paths+=$'\n'"${screenshots_path}$i.png"
           done
           echo $paths
