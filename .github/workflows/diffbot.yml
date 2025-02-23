@@ -98,15 +98,24 @@ jobs:
       - name: Generate image markdown
         id: generate-markdown
         run: |
-          urls=${{steps.upload-image-all.outputs.urls}}
-          urls="${urls//[\[\]]/}"
+          echo ${{steps.upload-image-all.outputs.urls}}
+          # Get the URLs and remove brackets using parameter expansion
+          urls="${{ steps.upload-image-all.outputs.urls }}"
+          urls="${urls//[\[\]]/}"  # Remove brackets
+          urls="${urls//\"/}"  # Remove quotes
+          
+          # Convert the string into an array by splitting on commas
           IFS=',' read -r -a url_array <<< "$urls"
+          
           markdownBody="Images:\n"
           i=0
+          
+          # Iterate over the URL array
           for url in "${url_array[@]}"; do
             markdownBody="${markdownBody}![Image ${i}](${url})\n"
             ((i++))
           done
+        
           echo "markdownBody<<EOF" >> $GITHUB_ENV
           echo "$markdownBody" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
