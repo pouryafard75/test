@@ -41,7 +41,7 @@ jobs:
           screenshot: ${{ steps.trigger.outputs.screenshot }}
 
 
-      - name: Running the RM action exporter
+      - name: Echo outputs
         if : ${{ steps.trigger.outputs.triggered == 'true'}}
         run: | 
           echo ${{ steps.run_rm_exporter.outputs.screenshots_url }}
