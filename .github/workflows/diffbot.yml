@@ -120,9 +120,14 @@ jobs:
         with:
           github-token: ${{ secrets.OAUTHTOKEN }}
           script: |
+            let commentBody = 'Image(s_:\n';
+            const varValue = parseInt({{ steps.run_rm_exporter.outputs.numberOfScreenshots }});
+            for (let i = 1; i <= varValue; i++) {
+              commentBody += `![${i}](${{fromJson(steps.upload-image-all.outputs.urls)[i-1]}})`;
+            }
             await github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: 'Images:\n![0](${{fromJson(steps.upload-image-all.outputs.urls)[0]}})![1](${{fromJson(steps.upload-image-all.outputs.urls)[1]}})})'
+              body: commentBody
             });
