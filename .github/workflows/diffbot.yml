@@ -98,7 +98,9 @@ jobs:
       - name: Generate image markdown
         id: generate-markdown
         run: |
-          urls="${{ fromJson(steps.upload_image.outputs.urls) }}"
+          echo ${{steps.upload-image-all.outputs.urls)}}
+          echo ${{ fromJson(steps.upload-image-all.outputs.urls) }}
+          urls="${{ fromJson(steps.upload-image-all.outputs.urls) }}"
           markdownBody="Images:\n"
           i=0
           for url in $urls; do
