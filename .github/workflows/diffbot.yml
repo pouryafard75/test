@@ -100,7 +100,7 @@ jobs:
         run: |
           markdown="Images:\n"
           count=${{ steps.run_rm_exporter.outputs.numberOfScreenshots }}
-          for i in $(seq 1 $count + 1); do
+          for i in $(seq 1 $count); do
             url=$(echo ${{ steps.upload-image-all.outputs.urls }} | jq -r .[$i])
             markdown+="![${i}](${url})"
           done
