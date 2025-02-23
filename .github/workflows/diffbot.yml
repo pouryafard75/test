@@ -69,7 +69,7 @@ jobs:
         id: generate-paths
         run: |
           paths=""
-          for i in $(seq 0 ${{ steps.run_rm_exporter.outputs.numberOfScreenshots }}); do
+          for i in $(seq 1 $((steps.run_rm_exporter.outputs.numberOfScreenshots + 1))); do
             paths+=$'\n'"${{ steps.run_rm_exporter.outputs.screenshots_path }}$i.png"
           done
           echo "paths<<EOF" >> $GITHUB_ENV
@@ -91,7 +91,7 @@ jobs:
         run: |
           markdown="Images:\n"
           count=${{ steps.run_rm_exporter.outputs.numberOfScreenshots }}
-          for i in $(seq 0 $count); do
+          for i in $(seq 1 $count + 1); do
             url=$(echo ${{ steps.upload-image-all.outputs.urls }} | jq -r .[$i])
             markdown+="![${i}](${url})"
           done
