@@ -27,17 +27,10 @@ jobs:
             } else {
               core.setOutput('triggered', 'false');
             }
-
-      # Step 1: Run the exporter
-      - name: Echo All
-        run: |
-          echo "Triggered: ${{ steps.trigger.outputs.triggered }}"
-          echo "URL: ${{ steps.trigger.outputs.url }}"
-          echo "Screenshot: ${{ steps.trigger.outputs.screenshot }}"
-      
+            
       # Step 1: Run the exporter
       - name: Running the RM action exporter
-        uses: pouryafard75/refactoringminer-astdiff-exporter@v0.7.2
+        uses: pouryafard75/refactoringminer-astdiff-exporter@v0.7.3
         id: run_rm_exporter 
         with:
           OAuthToken: ${{ secrets.OAUTHTOKEN }}
@@ -77,7 +70,7 @@ jobs:
         id: upload-image-0
         uses: McCzarny/upload-image@v1.5.0
         with:
-          path: screenshots/screenshot_0.png
+          path: screenshots/1.png
           uploadMethod: imgbb
           apiKey: '${{ secrets.IMGBB_API_KEY }}'
       - name: 'Comment PR'
