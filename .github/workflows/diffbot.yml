@@ -132,9 +132,9 @@ jobs:
             
             for (let i = 1; i <= varValue; i++) {
               console.log(`Processing image ${i}...`);
-              
+              index = i-1;
               // Access the image URL from the output
-              const imageUrl = ${{ fromJson(steps.upload-image-all.outputs.urls)[i - 1] }};
+              const imageUrl = ${{ fromJson(steps.upload-image-all.outputs.urls)[index]}};
               console.log(`Image ${i} URL: ${imageUrl}`);
               
               // Append the image URL to the comment body
