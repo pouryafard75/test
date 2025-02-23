@@ -29,11 +29,11 @@ jobs:
             }
 
       # Step 1: Run the exporter
-      - name: Running the RM action exporter
+      - name: Echo All
         run: |
-          echo "Triggered: ${{ steps.step_id.outputs.triggered }}"
-          echo "URL: ${{ steps.step_id.outputs.url }}"
-          echo "Screenshot: ${{ steps.step_id.outputs.screenshot }}"
+          echo "Triggered: ${{ steps.trigger.outputs.triggered }}"
+          echo "URL: ${{ steps.trigger.outputs.url }}"
+          echo "Screenshot: ${{ steps.trigger.outputs.screenshot }}"
       
       # Step 1: Run the exporter
       - name: Running the RM action exporter
