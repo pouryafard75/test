@@ -101,12 +101,13 @@ jobs:
           markdown="Images:\n"
           count=${{ steps.run_rm_exporter.outputs.numberOfScreenshots }}
           for i in $(seq 1 $count); do
-            url=$(echo ${{ steps.upload-image-all.outputs.urls }} | jq -r .[$i])
-            markdown+="![${i}](${url})"
+            url=$(echo ${{ steps.upload-image-all.outputs.urls }} | jq -r .[$((i - 1))])
+            markdown+="![${i}](${url})\n"
           done
           echo "markdown<<EOF" >> $GITHUB_ENV
           echo "$markdown" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
+
 
           
       - name: 'Comment Screenshots'
