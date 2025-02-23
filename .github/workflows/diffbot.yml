@@ -120,7 +120,7 @@ jobs:
         with:
           github-token: ${{ secrets.OAUTHTOKEN }}
           script: |
-            let commentBody = 'Image(s_:\n';
+            let commentBody = 'Image(s):\n';
             console.log('Initializing comment body...');
             const varValue = ${{ steps.run_rm_exporter.outputs.numberOfScreenshots }}
             console.log(`Number of screenshots (varValue): ${varValue}`);
