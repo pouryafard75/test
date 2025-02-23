@@ -123,7 +123,8 @@ jobs:
             let commentBody = 'Image(s_:\n';
             const varValue = parseInt({{ steps.run_rm_exporter.outputs.numberOfScreenshots }});
             for (let i = 1; i <= varValue; i++) {
-              commentBody += `![${i}](${{fromJson(steps.upload-image-all.outputs.urls)[${i}-1]}})`;
+              const imageUrl = ${{fromJson(steps.upload-image-all.outputs.urls)}}[i - 1]; // Calculate index outside
+              commentBody += `![${i}](${imageUrl})`;
             }
             await github.rest.issues.createComment({
               issue_number: context.issue.number,
