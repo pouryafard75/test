@@ -33,7 +33,7 @@ jobs:
       # Step 1: Run the exporter
       - name: Running the RM action exporter
         if : ${{ steps.trigger.outputs.triggered == 'true'}}
-        uses: pouryafard75/refactoringminer-astdiff-exporter@v0.8
+        uses: pouryafard75/refactoringminer-astdiff-exporter@v0.8.1
         id: run_rm_exporter 
         with:
           OAuthToken: ${{ secrets.OAUTHTOKEN }}
@@ -70,7 +70,7 @@ jobs:
         id: upload-image-0
         uses: McCzarny/upload-image@v1.5.0
         with:
-          path: ${{ steps.output.screenshot_path }}1.png
+          path: ${{ steps.run_rm_exporter.outputs.screenshots_path }}1.png
           uploadMethod: imgbb
           apiKey: '${{ secrets.IMGBB_API_KEY }}'
           
