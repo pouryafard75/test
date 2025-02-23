@@ -111,7 +111,7 @@ jobs:
 
           
       - name: 'Comment Screenshots'
-        uses: actions/github-script@0.3.0
+        uses: actions/github-script@v7
         if: ${{ steps.trigger.outputs.screenshot != null }}
         with:
           github-token: ${{ secrets.OAUTHTOKEN }}
