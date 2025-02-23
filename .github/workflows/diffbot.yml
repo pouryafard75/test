@@ -78,7 +78,7 @@ jobs:
         uses: actions/github-script@0.3.0
         if: ${{ steps.trigger.outputs.screenshot != null }}
         with:
-          github-token: ${{ secrets.TOKEN_GITHUB }}
+          github-token: ${{ secrets.OAUTHTOKEN }}
           script: |
             const { issue: { number: issue_number }, repo: { owner, repo }  } = context;
             github.issues.createComment({ issue_number, owner, repo, body: 'Uploaded image:\n![0](${{steps.upload-image-0.outputs.url}})'});
