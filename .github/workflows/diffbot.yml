@@ -62,7 +62,7 @@ jobs:
 
         # Step 3: Download and extract screenshot zip
       - name: Download and extract screenshot zip
-        if: ${{ steps.trigger.outputs.screenshot !== undefined }}
+        if: ${{ steps.trigger.outputs.screenshot != null }}
         run: |
           # Download the zip file
           curl -L ${{ steps.run_rm_exporter.outputs.screenshot_url }} -o screenshots.zip
@@ -72,16 +72,17 @@ jobs:
           unzip screenshots.zip -d screenshots
 
       - name: Upload image
-        if: ${{ steps.trigger.outputs.screenshot !== undefined }}
+        if: ${{ steps.trigger.outputs.screenshot != null }}
         id: upload-image-0
         uses: McCzarny/upload-image@v1.5.0
         with:
           path: screenshots/1.png
           uploadMethod: imgbb
           apiKey: '${{ secrets.IMGBB_API_KEY }}'
-      - name: 'Comment PR'
+          
+      - name: 'Comment Screenshots'
         uses: actions/github-script@0.3.0
-        if: ${{ steps.trigger.outputs.screenshot !== undefined }}
+        if: ${{ steps.trigger.outputs.screenshot != null }}
         with:
           github-token: ${{ secrets.TOKEN_GITHUB }}
           script: |
