@@ -78,7 +78,7 @@ jobs:
 
       - name: Upload image
         if: ${{ steps.trigger.outputs.screenshot != null }}
-        id: upload-image-0
+        id: upload-image-all
         uses: McCzarny/upload-image@v1.5.0
         with:
           path: ${{ env.paths }}
@@ -90,9 +90,10 @@ jobs:
         id: generate-markdown
         run: |
           markdown="Images:\n"
-          count=${{ steps.run_rm_exporter.outputs.screenshot_count }}
+          count=${{ steps.run_rm_exporter.outputs.numberOfScreenshots }}
           for i in $(seq 0 $count); do
-            markdown+="![${i}](${{fromJson(steps.upload_image.outputs.urls)[$i]}})"
+            url=$(echo ${{ steps.upload-image-all.outputs.urls }} | jq -r .[$i])
+            markdown+="![${i}](${url})"
           done
           echo "markdown<<EOF" >> $GITHUB_ENV
           echo "$markdown" >> $GITHUB_ENV
