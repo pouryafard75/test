@@ -27,9 +27,17 @@ jobs:
             } else {
               core.setOutput('triggered', 'false');
             }
+
       # Step 1: Run the exporter
       - name: Running the RM action exporter
-        uses: pouryafard75/refactoringminer-astdiff-exporter@v0.7.1
+        run: |
+          echo "Triggered: ${{ steps.step_id.outputs.triggered }}"
+          echo "URL: ${{ steps.step_id.outputs.url }}"
+          echo "Screenshot: ${{ steps.step_id.outputs.screenshot }}"
+      
+      # Step 1: Run the exporter
+      - name: Running the RM action exporter
+        uses: pouryafard75/refactoringminer-astdiff-exporter@v0.7.2
         id: run_rm_exporter 
         with:
           OAuthToken: ${{ secrets.OAUTHTOKEN }}
