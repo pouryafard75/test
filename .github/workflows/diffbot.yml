@@ -124,5 +124,5 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `Uploaded image(s):\n$${{ steps.generate_body.outputs.msgBody }}
+              body: `Uploaded image(s):\n${{ steps.generate_body.outputs.msgBody }}
             });
