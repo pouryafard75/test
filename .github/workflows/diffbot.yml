@@ -94,25 +94,25 @@ jobs:
           uploadMethod: imgbb
           apiKey: '${{ secrets.IMGBB_API_KEY }}'
         
-      - name: Generate image markdown
-        id: generate-markdown
-        run: |
-          echo ${{steps.upload-image-all.outputs.urls}}
-          markdownBody="Images:\n"
-          for i in $(seq 0 $((number_of_screenshots - 1))); do
-            markdownBody="${markdownBody}![Image ${i}](${{fromJson(steps.upload-image-all.outputs.urls)[0]}})\n"
-          done
+      # - name: Generate image markdown
+      #   id: generate-markdown
+      #   run: |
+      #     echo ${{steps.upload-image-all.outputs.urls}}
+      #     markdownBody="Images:\n"
+      #     for i in $(seq 0 $((number_of_screenshots - 1))); do
+      #       markdownBody="${markdownBody}![Image ${i}](${{fromJson(steps.upload-image-all.outputs.urls)[0]}})\n"
+      #     done
 
 
-      - name: Generate body with dynamic images
-        id: generate_body
-        run: |
-          urls=(${{ steps.upload-image-all.outputs.urls }})
-          body="Images:\n"
-          for i in "${!urls[@]}"; do
-            body+="![${i}](${urls[$i]})\n"
-          done
-          echo "::set-output name=msgBody::$body"
+      # - name: Generate body with dynamic images
+      #   id: generate_body
+      #   run: |
+      #     urls=(${{ steps.upload-image-all.outputs.urls }})
+      #     body="Images:\n"
+      #     for i in "${!urls[@]}"; do
+      #       body+="![${i}](${urls[$i]})\n"
+      #     done
+      #     echo "::set-output name=msgBody::$body"
           
       - name: 'Comment Screenshots'
         uses: actions/github-script@v7
@@ -124,5 +124,5 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `Uploaded image(s):\n${{ steps.generate_body.outputs.msgBody }}
+              body: 'Images:\n![0](${{fromJson(steps.upload-image-all.outputs.urls)[0]}})![1](${{fromJson(steps.upload-image-all.outputs.urls)[1]}})})'
             });
