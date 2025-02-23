@@ -28,21 +28,26 @@ jobs:
               core.setOutput('triggered', 'false');
             }
 
-      - name: Echo All
-        run: |
-          echo "Triggered: ${{ steps.trigger.outputs.triggered }}"
-          echo "URL: ${{ steps.trigger.outputs.url }}"
-          echo "Screenshot: ${{ steps.trigger.outputs.screenshot }}"
+
           
       # Step 1: Run the exporter
       - name: Running the RM action exporter
+        if : ${{ steps.trigger.outputs.triggered == 'true'}}
         uses: pouryafard75/refactoringminer-astdiff-exporter@v0.7.5
         id: run_rm_exporter 
         with:
           OAuthToken: ${{ secrets.OAUTHTOKEN }}
           URL: ${{ steps.trigger.outputs.url }}
           screenshot: ${{ steps.trigger.outputs.screenshot }}
-          
+
+
+      - name: Running the RM action exporter
+        if : ${{ steps.trigger.outputs.triggered == 'true'}}
+        run: | 
+          echo ${{ steps.run_rm_exporter.outputs.screenshots_url }}
+          echo "and"
+          echo ${{ steps.run_rm_exporter.outputs.artifact_url }}
+            
 
       # Step 2: Reply to the user with artifact url
       - name: Reply Artifact zip
