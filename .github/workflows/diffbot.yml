@@ -80,11 +80,11 @@ jobs:
             paths+=$'\n'"${screenshots_path}$i.png"
           done
           echo $paths
-
-    # Set paths as an environment variable for later steps
-    echo "paths<<EOF" >> $GITHUB_ENV
-    echo "$paths" >> $GITHUB_ENV
-    echo "EOF" >> $GITHUB_ENV
+          # Set paths as an environment variable for later steps
+          echo "paths<<EOF" >> $GITHUB_ENV
+          echo "$paths" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+          
       - name: Upload image
         if: ${{ steps.trigger.outputs.screenshot != null }}
         id: upload-image-all
