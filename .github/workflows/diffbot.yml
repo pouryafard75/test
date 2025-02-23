@@ -44,9 +44,9 @@ jobs:
       - name: Echo outputs
         if : ${{ steps.trigger.outputs.triggered == 'true'}}
         run: | 
-          echo ${{ steps.run_rm_exporter.outputs.screenshots_url }}
+          echo ${{ steps.run_rm_exporter.outputs.screenshots_path }}
           echo "and"
-          echo ${{ steps.run_rm_exporter.outputs.artifact_url }}
+          echo ${{ steps.run_rm_exporter.outputs.artifact_path }}
             
 
       # Step 2: Reply to the user with artifact url
@@ -65,23 +65,12 @@ jobs:
               
             })
 
-        # Step 3: Download and extract screenshot zip
-      - name: Download and extract screenshot zip
-        if: ${{ steps.trigger.outputs.screenshot != null }}
-        run: |
-          # Download the zip file
-          curl -L ${{ steps.run_rm_exporter.outputs.screenshots_url }} -o screenshots.zip
-          
-          # Extract the zip file
-          mkdir screenshots
-          unzip screenshots.zip -d screenshots
-
       - name: Upload image
         if: ${{ steps.trigger.outputs.screenshot != null }}
         id: upload-image-0
         uses: McCzarny/upload-image@v1.5.0
         with:
-          path: screenshots/1.png
+          path: ${{ steps.output.screenshot_path }}1.png
           uploadMethod: imgbb
           apiKey: '${{ secrets.IMGBB_API_KEY }}'
           
