@@ -121,14 +121,34 @@ jobs:
           github-token: ${{ secrets.OAUTHTOKEN }}
           script: |
             let commentBody = 'Image(s_:\n';
-            const varValue = parseInt({{ steps.run_rm_exporter.outputs.numberOfScreenshots }});
-            for (let i = 1; i <= varValue; i++) {
-              const imageUrl = ${{fromJson(steps.upload-image-all.outputs.urls)}}[i - 1]; // Calculate index outside
-              commentBody += `![${i}](${imageUrl})`;
+            console.log('Initializing comment body...');
+            
+            // Fetch the value of `numberOfScreenshots`
+            const varValue = parseInt(process.env.NUMBER_OF_SCREENSHOTS);  // Assuming you pass the output as an environment variable
+            console.log(`Number of screenshots (varValue): ${varValue}`);
+            
+            if (isNaN(varValue)) {
+              console.log('Error: The number of screenshots is not a valid number.');
+              return;
             }
+            
+            for (let i = 1; i <= varValue; i++) {
+              console.log(`Processing image ${i}...`);
+              
+              // Access the image URL from the output
+              const imageUrl = ${{fromJson(steps.upload-image-all.outputs.urls)}}[i - 1];
+              console.log(`Image ${i} URL: ${imageUrl}`);
+              
+              // Append the image URL to the comment body
+              commentBody += `![${i}](${imageUrl})\n`;
+            }
+            
+            console.log('Comment body constructed:\n' + commentBody);
+            
             await github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
               body: commentBody
             });
+            console.log('Comment posted to the issue!');
