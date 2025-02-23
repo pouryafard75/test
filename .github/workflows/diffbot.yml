@@ -94,7 +94,11 @@ jobs:
           uploadMethod: imgbb
           apiKey: '${{ secrets.IMGBB_API_KEY }}'
 
+      - name: Echo gooya
+        run: |
+          echo ${{fromJson(steps.upload-image-all.outputs.urls)[0]}}
 
+          
       - name: Generate image markdown
         id: generate-markdown
         run: |
