@@ -70,7 +70,7 @@ jobs:
         if: ${{ steps.trigger.outputs.screenshot != null }}
         run: |
           # Download the zip file
-          curl -L ${{ steps.run_rm_exporter.outputs.screenshot_url }} -o screenshots.zip
+          curl -L ${{ steps.run_rm_exporter.outputs.screenshots_url }} -o screenshots.zip
           
           # Extract the zip file
           mkdir screenshots
