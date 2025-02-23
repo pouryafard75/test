@@ -111,10 +111,9 @@ jobs:
           github-token: ${{ secrets.OAUTHTOKEN }}
           script: |
             const number_of_screenshots = ${{ steps.run_rm_exporter.outputs.numberOfScreenshots }}
-            const urls = ${{ fromJson(steps.upload-image-all.outputs.urls) }};
             let markdownBody = "Images:\n";
             for (let i = 0; i < number_of_screenshots; i++) {
-              markdownBody += `![Image ${i}](${urls[i]})\n`;
+              markdownBody += `![Image ${i}]((${{fromJson(steps.upload-image-all.outputs.urls)[${i}]}})\n`;
             }
             console.log(markdownBody);
             await github.rest.issues.createComment({
