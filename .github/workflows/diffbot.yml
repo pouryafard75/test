@@ -118,8 +118,9 @@ jobs:
               console.log(`Processing image ${i}...`);
               index = i-1;
               // Access the image URL from the output
-              
-              imageUrl="${{ fromJson(steps.upload-image-all.outputs.urls)[index] }}"
+
+              const urls = JSON.parse('${{ steps.upload-image-all.outputs.urls }}');
+              const imageUrl = urls[index]; // Access the specific image URL
               console.log(`Image ${i} URL: ${imageUrl}`);
               
               // Append the image URL to the comment body
