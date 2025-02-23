@@ -29,7 +29,7 @@ jobs:
             }
       # Step 1: Run the exporter
       - name: Running the RM action exporter
-        uses: pouryafard75/refactoringminer-astdiff-exporter@v0.7
+        uses: pouryafard75/refactoringminer-astdiff-exporter@v0.7.1
         id: run_rm_exporter 
         with:
           OAuthToken: ${{ secrets.OAUTHTOKEN }}
