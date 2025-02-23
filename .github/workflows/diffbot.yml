@@ -101,7 +101,7 @@ jobs:
           markdown="Images:\n"
           count=${{ steps.run_rm_exporter.outputs.numberOfScreenshots }}
           for i in $(seq 1 $count); do
-            url=${urls[$((i - 1))]}
+            url=${{ steps.upload-image-all.outputs.urls }}[$((i - 1))]
             markdown+="![${i}](${url})\n"
           done
           echo "markdown<<EOF" >> $GITHUB_ENV
@@ -116,9 +116,10 @@ jobs:
         with:
           github-token: ${{ secrets.OAUTHTOKEN }}
           script: |
+            const markdownBody = process.env.markdown || "";
             await github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: "Uploaded image(s):\n${{ env.markdown }}"
-            })
+              body: `Uploaded image(s):\n${markdownBody}`
+            });
