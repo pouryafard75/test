@@ -33,21 +33,13 @@ jobs:
       # Step 1: Run the exporter
       - name: Running the RM action exporter
         if : ${{ steps.trigger.outputs.triggered == 'true'}}
-        uses: pouryafard75/refactoringminer-astdiff-exporter@v0.8.3
+        uses: pouryafard75/refactoringminer-astdiff-exporter@v0.9
         id: run_rm_exporter 
         with:
           OAuthToken: ${{ secrets.OAUTHTOKEN }}
           URL: ${{ steps.trigger.outputs.url }}
           screenshot: ${{ steps.trigger.outputs.screenshot }}
 
-
-      - name: Echo outputs
-        if : ${{ steps.trigger.outputs.triggered == 'true'}}
-        run: | 
-          echo ${{ steps.run_rm_exporter.outputs.screenshots_path }}
-          echo "and"
-          echo ${{ steps.run_rm_exporter.outputs.artifact_path }}
-            
 
       # Step 2: Reply to the user with artifact url
       - name: Reply Artifact zip
@@ -79,7 +71,6 @@ jobs:
           for i in $(seq 1 $((number_of_screenshots))); do
             paths+=$'\n'"${screenshots_path}$i.png"
           done
-          echo $paths
           # Set paths as an environment variable for later steps
           echo "paths<<EOF" >> $GITHUB_ENV
           echo "$paths" >> $GITHUB_ENV
@@ -112,21 +103,17 @@ jobs:
             }
             
             for (let i = 1; i <= varValue; i++) {
-
-
-            
               console.log(`Processing image ${i}...`);
               index = i-1;
               // Access the image URL from the output
 
               const urls = JSON.parse('${{ steps.upload-image-all.outputs.urls }}');
               const imageUrl = urls[index]; // Access the specific image URL
-              console.log(`Image ${i} URL: ${imageUrl}`);
               
               // Append the image URL to the comment body
               commentBody += `![${i}](${imageUrl})\n`;
             }
-            
+          
             console.log('Comment body constructed:\n' + commentBody);
             
             await github.rest.issues.createComment({
