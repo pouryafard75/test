@@ -19,7 +19,7 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            const commentBody = context.payload.comment.body;
+            const commentBody = context.payload.issue?.body || context.payload.comment?.body || "";
             const regexScreenshot = /@diff\s+(\S+)\s+(\S+)/;  // Match URL + screenshot flag
             const regexArtifact = /@diff\s+(\S+)/;  // Match only URL
     
