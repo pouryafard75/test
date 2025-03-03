@@ -110,7 +110,6 @@ jobs:
         if: ${{ steps.trigger.outputs.screenshot != null && steps.run_rm_exporter.outputs.numberOfScreenshots != 0 }}
         with:
           script: |
-            await new Promise(resolve => setTimeout(resolve, 1000));
             let commentBody = 'Image(s):\n';
             console.log('Initializing comment body...');
             const varValue = ${{ steps.run_rm_exporter.outputs.numberOfScreenshots }}
@@ -130,7 +129,7 @@ jobs:
               const imageUrl = urls[index]; // Access the specific image URL
 
               // Append the image URL to the comment body
-              commentBody += `![${i}](${imageUrl})\n`;
+              commentBody += `![${i}](${imageUrl}?raw=true)\n`;
             }
 
             console.log('Comment body constructed:\n' + commentBody);
